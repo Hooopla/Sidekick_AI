@@ -10,3 +10,21 @@ from langchain_experimental.tools import PythonREPLTool
 from langchain_community.utilities import GoogleSerperAPIWrapper
 from langchain_community.utilities.wikipedia import WikipediaAPIWrapper
 
+load_dotenv(override=True)
+pushover_token = os.getenv("PUSHOVER_TOKEN")
+pushover_user = os.getenv("PUSHOVER_USER")
+pushover_url = "https://api.pushover.net/1/messages.json"
+serper = GoogleSerperAPIWrapper()
+
+# Push Notificaton for me :D
+def push(text: str):
+  """Send a push notifcation to the user"""
+  requests.post(pushover_url, data = {"token": pushover_token, "user": pushover_user, "message": text})
+  return "success"
+
+# Playwright tools
+async def playwright_tools():
+  playwright = await async_playwright().start()
+  browser = await playwright.chromium.launch(headless=False)
+  toolkit = PlayWrightBrowserToolkit.from_browser(async_browser=browser)
+  return toolkit.get_tools(), browser, playwright
