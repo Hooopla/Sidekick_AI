@@ -28,3 +28,11 @@ async def playwright_tools():
   browser = await playwright.chromium.launch(headless=False)
   toolkit = PlayWrightBrowserToolkit.from_browser(async_browser=browser)
   return toolkit.get_tools(), browser, playwright
+
+def get_file_tools():
+  toolkit = FileManagementToolkit(root_dir="sandbox")
+  return toolkit.get_tools()
+
+async def other_tools():
+  push_tool = Tool(name= "send_push_notification", func=push, description="Use this tool when you want to send a push notification")
+  file_tools = get_file_tools()
