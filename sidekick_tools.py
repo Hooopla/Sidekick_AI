@@ -16,12 +16,6 @@ pushover_user = os.getenv("PUSHOVER_USER")
 pushover_url = "https://api.pushover.net/1/messages.json"
 serper = GoogleSerperAPIWrapper()
 
-# Push Notificaton for me :D
-def push(text: str):
-  """Send a push notifcation to the user"""
-  requests.post(pushover_url, data = {"token": pushover_token, "user": pushover_user, "message": text})
-  return "success"
-
 # Playwright tools
 async def playwright_tools():
   playwright = await async_playwright().start()
@@ -29,21 +23,33 @@ async def playwright_tools():
   toolkit = PlayWrightBrowserToolkit.from_browser(async_browser=browser)
   return toolkit.get_tools(), browser, playwright
 
+# Push Notificaton for me :D
+def push(text: str):
+  """Send a push notifcation to the user"""
+  requests.post(pushover_url, data = {"token": pushover_token, "user": pushover_user, "message": text})
+  return "success"
+
+def push(text: str):
+  """Send a push notification to the user"""
+  requests.post(pushover_url, data = {"token": pushover_token, "user": pushover_user, "message": text})
+  return "success"
+
 def get_file_tools():
-  toolkit = FileManagementToolkit(root_dir="sandbox")
-  return toolkit.get_tools()
+    toolkit = FileManagementToolkit(root_dir="sandbox")
+    return toolkit.get_tools()
+
 
 async def other_tools():
   push_tool = Tool(
     name= "send_push_notification", 
     func=push, 
     description="Use this tool when you want to send a push notification")
-  
+
   file_tools = get_file_tools()
 
   tool_search = Tool(
-    name = "search",
-    func = serper.run,
+    name= "search",
+    func= serper.run,
     description = "Use this tool when you to get results of an online web search"
   )
   # Wikipedia functionality! :D WOAHHH
@@ -53,4 +59,4 @@ async def other_tools():
   # Allows to run code
   python_repl = PythonREPLTool()
 
-  return file_tools + [push_tool, file_tools, tool_search, wiki_tool, python_repl]
+  return file_tools + [push_tool, tool_search, python_repl,  wiki_tool]

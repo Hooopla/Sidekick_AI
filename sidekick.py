@@ -98,7 +98,7 @@ class Sidekick:
   def worker_router(self, state: State) -> str:
     last_message = state["messages"][-1]
 
-    if hasattr(last_message, "tool_calls") and last_message.tool_cools:
+    if hasattr(last_message, "tool_calls") and last_message.tool_calls:
       return "tools"
     else:
       return "evaluator"
