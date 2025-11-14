@@ -50,6 +50,7 @@ async def other_tools():
   wikipedia = WikipediaAPIWrapper()
   wiki_tool = WikipediaQueryRun(api_wrapper=wikipedia)
 
+  # Allows to run code
   python_repl = PythonREPLTool()
 
   return file_tools + [push_tool, file_tools, tool_search, wiki_tool, python_repl]

@@ -216,3 +216,15 @@ class Sidekick:
     return history + [user, reply, feedback]
 
   # Cleanup
+  def cleanup(self):
+    if self.browser:
+      try: 
+        loop = asyncio.get_running_loop()
+        loop.create_task(self.browser.close())
+        if self.playwright:
+          loop.create_task(self.playwright.stop())
+      except RuntimeError:
+        # If no loop is running, do a direct run
+        asyncio.run(self.browser.close())
+        if self.playwright:
+          asyncio.run(self.playwright.stop())
